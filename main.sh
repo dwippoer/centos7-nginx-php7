@@ -24,8 +24,8 @@ else
 fi
 
 #install epel & remi
-#sudo rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-#sudo rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+sudo rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 sudo rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 
 #install nginx
@@ -51,11 +51,15 @@ vhost_conf
 nginx_conf
 
 #instal php7
-sudo su - root -c 'yum -y install php71-php-pecl-mysql php71-php-pecl-zip php71-php-mysqlnd php71-php-mcrypt php71-php-mbstring php71-php-json php71-php-gd php71 php71-php php71-php-cli php71-php-common php71-php-pecl-swoole php71-php-tidy php71-php-xml php71-php-xmlrpc php71-php-pecl-memcached php71-php-curl'
+sudo yum -y install php71-php-pecl-mysql php71-php-pecl-zip php71-php-mysqlnd php71-php-mcrypt php71-php-mbstring php71-php-json php71-php-gd php71 php71-php php71-php-cli php71-php-common php71-php-pecl-swoole php71-php-tidy php71-php-xml php71-php-xmlrpc php71-php-pecl-memcached php71-php-curl
 
-sudo su - root -c 'yum -y install php71-php-fpm'
+sudo yum -y install php71-php-fpm
 
 #start services
 sudo systemctl start php71-php-fpm
 sudo systemctl enable php71-php-fpm
- 
+
+#update php config
+sudo su - root -c 'sed -i "/;cgi.fix_pathinfo=1/c\cgi.fix_pathinfo=0" /etc/opt/remi/php71/php.ini'
+sudo su - root -c 'sed -i "/;date.timezone =/c\date.timezone = Asia/Jakarta" /etc/opt/remi/php71/php.ini'
+sudo su - root -c 'sed -i " 
