@@ -62,10 +62,16 @@ sudo systemctl enable php71-php-fpm
 #update php config
 sudo su - root -c 'sed -i "/;cgi.fix_pathinfo=1/c\cgi.fix_pathinfo=0" /etc/opt/remi/php71/php.ini'
 sudo su - root -c 'sed -i "/;date.timezone =/c\date.timezone = Asia/Jakarta" /etc/opt/remi/php71/php.ini'
-#sudo su - root -c 'sed -i ""
+sudo su - root -c 'sed -i ""'
 
 #check apache
+uninstall_apache()
+{
 sudo systemctl status httpd
 if [ $? = 0]; then
 sudo systemctl stop httpd && sudo yum -y remove httpd;
 fi
+}
+uninstall_apache
+
+#
