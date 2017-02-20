@@ -15,16 +15,17 @@ sudo rm /etc/localtime
 sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 #clone repo
-if [ -d $temp_dir ];
+
+if [ ! -d $temp_dir ];
 then
 	git clone https://github.com/dwippoer/centos7-nginx-php7.git $temp_dir;
 else
-	rm -rf $temp_dir && git clone https://github.com/dwippoer/cento7-nginx-php7.git $ temp_dir;
+	rm -rf $temp_dir && git clone https://github.com/dwippoer/cento7-nginx-php7.git $temp_dir;
 fi
 
 #install epel & remi
-sudo rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-sudo rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+#sudo rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#sudo rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 sudo rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 
 #install nginx
@@ -50,4 +51,11 @@ vhost_conf
 nginx_conf
 
 #instal php7
-sudo yum -y install 
+sudo su - root -c 'yum -y install php71-php-pecl-mysql php71-php-pecl-zip php71-php-mysqlnd php71-php-mcrypt php71-php-mbstring php71-php-json php71-php-gd php71 php71-php php71-php-cli php71-php-common php71-php-pecl-swoole php71-php-tidy php71-php-xml php71-php-xmlrpc php71-php-pecl-memcached php71-php-curl'
+
+sudo su - root -c 'yum -y install php71-php-fpm'
+
+#start services
+sudo systemctl start php71-php-fpm
+sudo systemctl enable php71-php-fpm
+ 
