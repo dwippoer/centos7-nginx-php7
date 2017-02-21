@@ -94,4 +94,6 @@ sudo systemctl restart php71-php-fpm
 
 #change ownership php session
 sudo chown -R nginx:nginx /var/opt/remi/php71/lib/php/session
+
+
 exit 0
