@@ -3,6 +3,7 @@ temp_dir="/tmp/install"
 nginx_dir1="/etc/nginx"
 nginx_dir2="/etc/nginx/conf.d"
 vhost_dir="/home/vhost"
+php_dir="/etc/opt/remi/php71"
 
 #update centos
 sudo yum -y update
@@ -16,12 +17,17 @@ sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 #clone repo
 
-if [ ! -d $temp_dir ];
+#if [ -d $temp_dir ];
+#then
+#	sudo rm -rf $temp_dir && git clone https://github.com/dwippoer/cento7-nginx-php7.git $temp_dir;
+#else
+#	git clone https://github.com/dwippoer/centos7-nginx-php7.git;
+#fi
+if [ -d $temp_dir ];
 then
-	git clone https://github.com/dwippoer/centos7-nginx-php7.git $temp_dir;
-else
-	rm -rf $temp_dir && git clone https://github.com/dwippoer/cento7-nginx-php7.git $temp_dir;
+	sudo rm -rf $temp_dir;
 fi
+git clone https://github.com/dwippoer/centos7-nginx-php7.git $temp_dir
 
 #install epel & remi
 sudo rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -60,18 +66,25 @@ sudo systemctl start php71-php-fpm
 sudo systemctl enable php71-php-fpm
 
 #update php config
-sudo su - root -c 'sed -i "/;cgi.fix_pathinfo=1/c\cgi.fix_pathinfo=0" /etc/opt/remi/php71/php.ini'
-sudo su - root -c 'sed -i "/;date.timezone =/c\date.timezone = Asia/Jakarta" /etc/opt/remi/php71/php.ini'
-sudo su - root -c 'sed -i ""'
+sudo su - root -c 'mv $php_dir/php.ini $php_dir/php.ini.ori && cp $temp_dir/php.ini $php_dir'
 
 #check apache
 uninstall_apache()
 {
 sudo systemctl status httpd
-if [ $? = 0]; then
+if [ $? = 0 ]; then
 sudo systemctl stop httpd && sudo yum -y remove httpd;
 fi
 }
 uninstall_apache
 
-#
+#reduce swappines
+sudo su - root -c 'echo "5" > /proc/sys/vm/swappiness'
+
+#set firewall
+sudo su - root -c 'cp $temp_dir/iptables.rules /etc'
+sudo iptables -F
+sudo iptables-restore < /etc/iptables.rules
+sudo su - root -c 'echo "iptables-restore < /etc/iptables.rules" >> /etc/rc.local'
+ls $temp_dir
+exit 0
