@@ -82,7 +82,7 @@ uninstall_apache
 sudo su - root -c 'echo "5" > /proc/sys/vm/swappiness'
 
 #set firewall
-sudo su - root -c 'cp -f $temp_dir/iptables.rules /etc'
+sudo su - root -c 'cp -f $temp_dir/iptables.rules /etc/iptables.rules'
 sudo iptables -F
 sudo iptables-restore < /etc/iptables.rules
 sudo su - root -c 'echo "iptables-restore < /etc/iptables.rules" >> /etc/rc.local'
