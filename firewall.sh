@@ -14,12 +14,12 @@ $IPT -A INPUT -i $PUB_IF -p tcp ! --syn -m state --state NEW -j DROP
 $IPT -I INPUT -i $PUB_IF -f -j DROP
 $IPT -I INPUT -i $PUB_IF -p tcp --tcp-flags ALL FIN,URG,PSH -j DROP
 $IPT -I INPUT -i $PUB_IF -p tcp --tcp-flags ALL ALL -j DROP
-$IPT -A INPUT -i $PUB_IF -p tcp --tcp-flags ALL NONE -m --limit 5/m --limit-burst 7 -j LOG --log-prefix "NULL Packets"
+$IPT -A INPUT -i $PUB_IF -p tcp --tcp-flags ALL NONE -m limit --limit 5/m --limit-burst 7 -j LOG --log-prefix "NULL Packets"
 $IPT -A INPUT -i $PUB_IF -p tcp --tcp-flags ALL NONE -j DROP
-$IPT -A INPUT -i $PUB_IF -p tcp --tcp-flags SYN,RST SYN, RST -j DROP
+$IPT -A INPUT -i $PUB_IF -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
 $IPT -I INPUT -p tcp --dport 22 -s 0/0 -j ACCEPT
 $IPT -I INPUT -i $PUB_IF -p icmp --icmp-type 8 -s 0/0 -m state --state NEW,ESTABLISHED,RELATED -m limit --limit 100/sec -j ACCEPT
-$IPT -I OUTPUT -o $PUB_IF -p icmp --icmp-type 0 -d 0/0 -m state --state ESTABLISDE,RELATED -j ACCEPT
+$IPT -I OUTPUT -o $PUB_IF -p icmp --icmp-type 0 -d 0/0 -m state --state ESTABLISHED,RELATED -j ACCEPT
 $IPT -I INPUT  -i $PUB_IF -p tcp -s 0/0 --sport 1024:65535 --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
 $IPT -I OUTPUT -o $PUB_IF -p tcp --sport 80 -d 0/0 --dport 1024:65535 -m state --state ESTABLISHED -j ACCEPT
 $IPT -I INPUT -i $PUB_IF  -p tcp -s 0/0 --sport 1024:65535 --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
@@ -27,7 +27,7 @@ $IPT -I OUTPUT -o $PUB_IF -p tcp --sport 443 -d 0/0 --dport 1024:65535 -m state 
 $IPT -A OUTPUT -o $PUB_IF -p udp --dport 123 -m state --state NEW,ESTABLISHED -j ACCEPT
 $IPT -I INPUT -i $PUB_IF -p udp --sport 123 -m state --state ESTABLISHED -j ACCEPT
 $IPT -I INPUT -i $PUB_IF -p tcp --sport 25 -m state --state ESTABLISHED -j ACCEPT
-$IPT -I OUTPUT -O $PUB_IF -p tcp --dport 25 -m state --state NEW,ESTABLISHED -j ACCEPT
+$IPT -I OUTPUT -o $PUB_IF -p tcp --dport 25 -m state --state NEW,ESTABLISHED -j ACCEPT
 $IPT -I INPUT -i $PUB_IF -p tcp --sport 587 -m state --state ESTABLISHED -j ACCEPT
 $IPT -I OUTPUT -o $PUB_IF -p tcp --dport 587 -m state --state NEW,ESTABLISHED -j ACCEPT
 $IPT -I INPUT -i $PUB_IF -p tcp --sport 465 -m state --state ESTABLISHED -j ACCEPT
