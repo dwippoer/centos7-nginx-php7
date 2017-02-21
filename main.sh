@@ -82,8 +82,8 @@ sudo iptables-restore < /etc/iptables.rules
 sudo su - root -c 'echo "iptables-restore < /etc/iptables.rules" >> /etc/rc.local'
 
 #update php pool
-sudo su - root -c 'sed -i "user = apache/c\user = nginx" /etc/opt/remi/php71/php-fpm.d/www.conf'
-sudo su - root -c 'sed -i "group = apache/c\group = nginx" /etc/opt/remi/php71/php-fpm.d/www.conf'
+sudo su - root -c 'sed -i "/user = apache/c\user = nginx" /etc/opt/remi/php71/php-fpm.d/www.conf'
+sudo su - root -c 'sed -i "/group = apache/c\group = nginx" /etc/opt/remi/php71/php-fpm.d/www.conf'
 
 #update sysctl
 sudo su - root -c 'mv /etc/sysctl.conf /etc/sysctl.conf.ori && cp /tmp/install/sysctl.conf /etc/sysctl.conf'
