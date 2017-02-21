@@ -36,6 +36,10 @@ $IPT -I INPUT -i $PUB_IF -p tcp --sport 110 -m state --state ESTABLISHED -j ACCE
 $IPT -I OUTPUT -o $PUB_IF -p tcp --dport 110 -m state --state NEW,ESTABLISHED -j ACCEPT
 $IPT -I INPUT -i $PUB_IF -p tcp --sport 995 -m state --state ESTABLISHED -j ACCEPT
 $IPT -I OUTPUT -o $PUB_IF -p tcp --dport 995 -m state --state NEW,ESTABLISHED -j ACCEPT
+$IPT -I INPUT -i $PUB_IF -p udp --sport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+$IPT -A OUTPUT -o $PUB_IF -p udp --dport 53 -j ACCEPT
+$IPT -I INPUT -i $PUB_IF -p udp --dport 53 -j ACCEPT
+$IPT -I INPUT -i $PUB_IF -p tcp --dport 53 -j ACCEPT
 $IPT -A INPUT -m limit --limit 5/m --limit-burst 10 -j LOG --log-prefix "DEFAULT DROP"
-$IPT -A INPUT -j DROP 
+#$IPT -A INPUT -j DROP 
 exit 0
