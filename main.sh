@@ -16,13 +16,6 @@ sudo rm /etc/localtime
 sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 #clone repo
-
-#if [ -d $temp_dir ];
-#then
-#	sudo rm -rf $temp_dir && git clone https://github.com/dwippoer/cento7-nginx-php7.git $temp_dir;
-#else
-#	git clone https://github.com/dwippoer/centos7-nginx-php7.git;
-#fi
 if [ -d $temp_dir ];
 then
 	sudo rm -rf $temp_dir;
@@ -66,7 +59,8 @@ sudo systemctl start php71-php-fpm
 sudo systemctl enable php71-php-fpm
 
 #update php config
-sudo su - root -c 'mv $php_dir/php.ini $php_dir/php.ini.ori && cp $temp_dir/php.ini $php_dir'
+sudo su - root -c 'mv /etc/opt/remi/php71/php.ini /etc/opt/remi/php71/php.ini.ori'
+sudo su - root -c 'cp /tmp/install/php.ini /etc/opt/remi/php71'
 
 #check apache
 uninstall_apache()
@@ -82,7 +76,7 @@ uninstall_apache
 sudo su - root -c 'echo "5" > /proc/sys/vm/swappiness'
 
 #set firewall
-sudo su - root -c 'cp -f $temp_dir/iptables.rules /etc/iptables.rules'
+sudo su - root -c 'cp /tmp/install/iptables.rules /etc/iptables.rules'
 sudo iptables -F
 sudo iptables-restore < /etc/iptables.rules
 sudo su - root -c 'echo "iptables-restore < /etc/iptables.rules" >> /etc/rc.local'
