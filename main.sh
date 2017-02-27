@@ -16,10 +16,10 @@ sudo rm /etc/localtime
 sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 #clone repo
-if [ -d $temp_dir ];
-then
-	sudo rm -rf $temp_dir;
-fi
+#if [ -d $temp_dir ];
+#then
+#	sudo rm -rf $temp_dir;
+#fi
 git clone https://github.com/dwippoer/centos7-nginx-php7.git $temp_dir
 
 #install epel & remi
